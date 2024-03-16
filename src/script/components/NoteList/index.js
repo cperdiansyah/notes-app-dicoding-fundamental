@@ -1,6 +1,8 @@
 class NoteList extends HTMLElement {
   _shadowRoot = null;
   _style = null;
+  _column = 3;
+  _gutter = 16;
 
   static get observedAttributes() {
     return ['column', 'gutter'];
@@ -21,7 +23,7 @@ class NoteList extends HTMLElement {
           display: block;
         }
         
-        .list {
+        .note-list {
           display: grid;
           grid-template-columns: ${'1fr '.repeat(this.column)};
         

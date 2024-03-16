@@ -55,6 +55,7 @@ class NoteItem extends HTMLElement {
           font-size: 14px;
           font-weight: lighter;
           color: #7C7C7C;
+          margin: 0;
 
         }
   
@@ -63,7 +64,7 @@ class NoteItem extends HTMLElement {
           margin-top: 10px;
           
           overflow: hidden;
-  
+          white-space: pre-line;
           text-overflow: ellipsis;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 5; /* number of lines to show */
