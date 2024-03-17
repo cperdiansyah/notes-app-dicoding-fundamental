@@ -58,7 +58,18 @@ const Home = () => {
     }
   });
 
-  /* Event listener */
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (
+      !target.closest('note-form') &&
+      !target.closest('flying-button') &&
+      noteFormElement.hasAttribute('show')
+    ) {
+      noteFormElement.removeAttribute('show');
+    }
+  });
+
+  /* Load note handler */
   window.addEventListener('DOMContentLoaded', () => {
     loadNote();
   });

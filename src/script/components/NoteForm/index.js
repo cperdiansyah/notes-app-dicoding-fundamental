@@ -102,10 +102,24 @@ class AddNoteForm extends HTMLElement {
     this._shadowRoot.appendChild(this._style);
     this._shadowRoot.innerHTML += `
     <div class="form-wrapper">
-      <form id="note-form">
+      <form id="note-form" method="post">
         <h3>Add Note</h3>
-        <input type="text" placeholder="Note Title" />
-        <textarea name="desc-note" id="desc-note" cols="30" rows="10" placeholder="Body Note"></textarea>
+        <input 
+          type="text" placeholder="Note Title"
+          requred="true"
+          max="10"
+          min="1"
+        />
+        <textarea 
+          name="desc-note" 
+          id="desc-note" 
+          cols="30" 
+          rows="10" 
+          placeholder="Body Note"
+          requred="true"
+          max="255"
+          min="1"
+          ></textarea>
         <button>Submit</button>
       </form>
     </div>
