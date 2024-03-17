@@ -5,12 +5,17 @@ const Home = () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('note-list');
 
+  const noteFormContainerElement = document.querySelector('#notes-form');
+  const flyingButtonElement = document.querySelector('flying-button');
+  const noteFormElement = document.querySelector('note-form');
+
+  /* show note handler */
   const loadNote = () => {
     const result = Notes.getAll();
-    console.log(result);
     displayResult(result);
 
     showNoteList();
+    resizeGridLayout();
   };
 
   const displayResult = (notes) => {
@@ -28,12 +33,37 @@ const Home = () => {
     });
     Utils.showElement(noteListElement);
   };
-  // searchFormElement.addEventListener('search', onSearchHandler);
-  // document.addEventListener('DOMContentLoaded', () => {
-  //   console.log('asd');
-  // });
 
-  loadNote();
+  const resizeGridLayout = () => {
+    const width = window.innerWidth;
+    if (width > 768) {
+      noteListElement.setAttribute('column', '3');
+      noteListElement.setAttribute('gutter', '16');
+    } else if (width > 450) {
+      noteListElement.setAttribute('column', '2');
+      noteListElement.setAttribute('gutter', '13');
+    } else {
+      noteListElement.setAttribute('column', '1');
+      noteListElement.setAttribute('gutter', '10');
+    }
+  };
+
+  /* flying button and form show handler */
+  flyingButtonElement.addEventListener('click', (evt) => {
+    const isEelementShow = noteFormElement.hasAttribute('show');
+    if (isEelementShow) {
+      noteFormElement.removeAttribute('show');
+    } else {
+      noteFormElement.setAttribute('show', 'true');
+    }
+  });
+
+  /* Event listener */
+  window.addEventListener('DOMContentLoaded', () => {
+    loadNote();
+  });
+
+  window.addEventListener('resize', resizeGridLayout);
 };
 
 export default Home;

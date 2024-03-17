@@ -1,3 +1,4 @@
+import Utils from '../../utils.js';
 class NoteList extends HTMLElement {
   _shadowRoot = null;
   _style = null;
