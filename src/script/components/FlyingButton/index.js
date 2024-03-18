@@ -3,7 +3,6 @@ class FlyingButton extends HTMLElement {
   _style = null;
   _clickEvent = 'click';
 
-
   constructor() {
     super();
 
@@ -30,7 +29,7 @@ class FlyingButton extends HTMLElement {
 
           width: 50px;
           height: 50px;
-          border-radius: 25px;
+          border-radius: 15px;
           border: none;
 
           color: #fff;
@@ -58,7 +57,6 @@ class FlyingButton extends HTMLElement {
     //   .addEventListener('submit', (event) => this._onFormSubmit(event, this));
     this.addEventListener(this._clickEvent, this._onSearchBarSubmit);
   }
-
 
   render() {
     this._emptyContent();

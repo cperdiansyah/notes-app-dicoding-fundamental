@@ -34,6 +34,12 @@ const Home = () => {
     Utils.showElement(noteListElement);
   };
 
+  const onSubmitNoteHandler = (event) => {
+    event.preventDefault();
+
+    const { title, body } = event.detail.data;
+  };
+
   const resizeGridLayout = () => {
     const width = window.innerWidth;
     if (width > 768) {
@@ -75,6 +81,8 @@ const Home = () => {
   });
 
   window.addEventListener('resize', resizeGridLayout);
+
+  noteFormElement.addEventListener('addNote', onSubmitNoteHandler);
 };
 
 export default Home;
