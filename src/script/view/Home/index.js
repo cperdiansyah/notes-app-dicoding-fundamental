@@ -1,8 +1,7 @@
-import Notes from '../../data/notes.js';
+import ApiNotes from '../../../api/index.js';
 import Utils from '../../utils.js';
 
 const Home = () => {
-  const notes = new Notes();
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('note-list');
 
@@ -10,12 +9,36 @@ const Home = () => {
   const noteFormElement = document.querySelector('note-form');
 
   /* show note handler */
-  const loadNote = () => {
-    const result = notes.getNotes();
-    displayResult(result);
-
-    showNoteList();
+  const init = async () => {
+    loadNote();
     resizeGridLayout();
+  };
+  const loadNote = async () => {
+    toggleNoteForm('hide');
+
+    try {
+      noteListElement.setAttribute('loading', true);
+      const notes = await ApiNotes.getNotes();
+      const dataNotes = notes.data;
+
+      if (dataNotes.length === 0) {
+        noteListElement.setAttribute('loading', false);
+        noteListElement.setAttribute('empty', true);
+        return;
+      } else {
+        noteListElement.setAttribute('empty', false);
+      }
+
+      setTimeout(() => {
+        noteListElement.setAttribute('loading', false);
+        displayResult(notes.data);
+        showNoteList();
+      }, [500]);
+    } catch (error) {
+      noteListElement.setAttribute('loading', false);
+
+      throw error;
+    }
   };
 
   const displayResult = (notes) => {
@@ -27,6 +50,7 @@ const Home = () => {
     Utils.emptyElement(noteListElement);
     noteListElement.append(...noteItemElements);
   };
+
   const showNoteList = () => {
     Array.from(noteListContainerElement.children).forEach((element) => {
       Utils.hideElement(element);
@@ -35,23 +59,28 @@ const Home = () => {
   };
 
   /* Handle submit notes form */
-  const onSubmitNoteHandler = (event) => {
-    event.preventDefault();
+  const onSubmitNoteHandler = async (event) => {
+    try {
+      event.preventDefault();
 
-    const { title, body } = event.detail.data;
+      const { title, body } = event.detail.data;
 
-    const date = new Date();
+      const noteData = {
+        title,
+        body,
+      };
+      const result = await ApiNotes.addNote(noteData);
 
-    const noteData = {
-      id: `notes-${+date}`,
-      title,
-      body,
-      createdAt: date.toISOString(),
-      archived: false,
-    };
-    notes.addNote(noteData);
-    toggleNoteForm('hide');
-    loadNote();
+      if (result.status === 'fail') {
+        throw Error(result.message);
+      }
+
+      window.alert('add note success');
+      // toggleNoteForm('hide');
+      loadNote();
+    } catch (error) {
+      window.alert(error);
+    }
   };
 
   const resizeGridLayout = () => {
@@ -100,7 +129,7 @@ const Home = () => {
 
   /* Load note handler */
   window.addEventListener('DOMContentLoaded', () => {
-    loadNote();
+    init();
   });
 
   window.addEventListener('resize', resizeGridLayout);
