@@ -1,7 +1,7 @@
 class AddNoteForm extends HTMLElement {
   _shadowRoot = null;
   _style = null;
-  _show = true;
+  _show = false;
   _submitNote = 'submit';
   _addNote = 'addNote';
 
@@ -169,8 +169,8 @@ class AddNoteForm extends HTMLElement {
       .removeEventListener('blur', this._validateFieldHandler);
   }
 
-  _onFormSubmit(event, searchBarInstance) {
-    searchBarInstance.dispatchEvent(new CustomEvent('submit'));
+  _onFormSubmit(event, noteFormInstance) {
+    noteFormInstance.dispatchEvent(new CustomEvent('submit'));
     event.preventDefault();
   }
 
@@ -191,7 +191,6 @@ class AddNoteForm extends HTMLElement {
 
   _customValidationInputHandler = (event) => {
     event.target.setCustomValidity('');
-    console.log(event.target.validity);
     if (event.target.validity.valueMissing) {
       event.target.setCustomValidity('Wajib diisi.');
       return;
@@ -217,10 +216,9 @@ class AddNoteForm extends HTMLElement {
     // Validate the field
     const isValid = event.target.validity.valid;
     const errorMessage = event.target.validationMessage;
-
     const connectedValidationId = event.target.getAttribute('aria-describedby');
     const connectedValidationEl = connectedValidationId
-      ? this._shadowRoot.getElementById(connectedValidationId)
+      ? this.shadowRoot.getElementById(connectedValidationId)
       : null;
 
     if (connectedValidationEl && errorMessage && !isValid) {

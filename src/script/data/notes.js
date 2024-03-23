@@ -1,7 +1,19 @@
 import notesData from './data.js';
 class Notes {
-  static getAll() {
-    return notesData;
+  constructor() {
+    this.notes = notesData;
+  }
+
+  addNote(note) {
+    this.notes.push(note);
+  }
+
+  getNotes() {
+    return this.notes;
+  }
+
+  getNoteById(id) {
+    return this.notes.find((note) => note.id === id);
   }
 }
 export default Notes;
