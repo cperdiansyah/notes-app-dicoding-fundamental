@@ -19,9 +19,9 @@ module.exports = {
         test: /\.less$/i,
         use: [
           // compiles Less to CSS
-          "style-loader",
-          "css-loader",
-          "less-loader",
+          'style-loader',
+          'css-loader',
+          'less-loader',
         ],
       },
     ],
@@ -43,87 +43,6 @@ module.exports = {
     }),
   ],
 
-  // entry: pages.reduce((config, page) => {
-  //   config[page] = `./src/${page}.js`;
-  //   return config;
-  // }, {}),
-
-  // output: {
-  //   filename: '[name].bundle.js',
-  //   path: path.resolve(__dirname, 'dist'),
-  // },
-
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /\.css$/,
-  //       use: [
-  //         {
-  //           loader: 'style-loader',
-  //         },
-  //         {
-  //           loader: 'css-loader',
-  //         },
-  //       ],
-  //     },
-
-  //     {
-  //       test: /\.(woff|woff2|eot|ttf|otf)$/,
-  //       loader: 'file-loader',
-  //       options: {
-  //         outputPath: 'fonts/',
-  //       },
-  //     },
-  //     {
-  //       test: /\.html$/i,
-  //       loader: 'html-loader',
-  //       options: {
-  //         minimize: {
-  //           removeComments: true,
-  //           collapseWhitespace: false,
-  //         },
-  //         sources: {
-  //           list: [
-  //             {
-  //               tag: 'img',
-  //               attribute: 'data-src',
-  //               type: 'src',
-  //             },
-  //             {
-  //               tag: 'img',
-  //               attribute: 'data-srcset',
-  //               type: 'srcset',
-  //             },
-  //             {
-  //               // Tag name
-  //               tag: 'link',
-  //               // Attribute name
-  //               attribute: 'href',
-  //               // Type of processing, can be `src` or `scrset`
-  //               type: 'src',
-  //               // Allow to filter some attributes
-  //               filter: (tag, attribute, attributes, resourcePath) => {
-  //                 if (/my-html\.html$/.test(resourcePath)) {
-  //                   return false;
-  //                 }
-
-  //                 if (!/stylesheet/i.test(attributes.rel)) {
-  //                   return false;
-  //                 }
-
-  //                 if (attributes.type && attributes.type.trim().toLowerCase() !== 'text/css') {
-  //                   return false;
-  //                 }
-
-  //                 return true;
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     },
-  //   ],
-  // },
   optimization: {
     splitChunks: {
       cacheGroups: {
@@ -135,24 +54,4 @@ module.exports = {
       },
     },
   },
-  /* pulgins */
-  // plugins: [].concat(
-  //   new CopyWebpackPlugin({
-  //     patterns: [
-  //       {
-  //         from: path.resolve(__dirname, 'src/img/'),
-  //         to: path.resolve(__dirname, 'dist/img/'),
-  //       },
-  //     ],
-  //   }),
-  //   // pages.map(
-  //   //   (page) =>
-  //   //     new HtmlWebpackPlugin({
-  //   //       template: path.resolve(__dirname, `src/scripts/view/${page}/${page}.html`),
-  //   //       // favicon: path.resolve(__dirname, 'src/img/favicon.ico'),
-  //   //       filename: `${page}.html`,
-  //   //       chunks: [`${page}`],
-  //   //     }),
-  //   // ),
-  // ),
 };
