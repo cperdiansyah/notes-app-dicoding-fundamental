@@ -1,18 +1,22 @@
 import ApiNotes from '../../../api/index.js';
 import Utils from '../../utils.js';
+import { customValidationInputHandler, validateFieldHandler } from './validation.js';
 
 const Home = () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('note-list');
 
-  const flyingButtonElement = document.querySelector('flying-button');
-  const noteFormElement = document.querySelector('note-form');
+  const flyingButtonElement = document.querySelector('button.flying-button');
+  const noteFormElement = document.querySelector('.form-wrapper');
+
+  const inputs = document.querySelectorAll('form input, form textarea');
 
   /* show note handler */
   const init = async () => {
     loadNote();
     resizeGridLayout();
   };
+
   const loadNote = async () => {
     toggleNoteForm('hide');
 
@@ -58,31 +62,6 @@ const Home = () => {
     Utils.showElement(noteListElement);
   };
 
-  /* Handle submit notes form */
-  const onSubmitNoteHandler = async (event) => {
-    try {
-      event.preventDefault();
-
-      const { title, body } = event.detail.data;
-
-      const noteData = {
-        title,
-        body,
-      };
-      const result = await ApiNotes.addNote(noteData);
-
-      if (result.status === 'fail') {
-        throw Error(result.message);
-      }
-
-      window.alert('add note success');
-      // toggleNoteForm('hide');
-      loadNote();
-    } catch (error) {
-      window.alert(error);
-    }
-  };
-
   const resizeGridLayout = () => {
     const width = window.innerWidth;
     if (width > 768) {
@@ -99,17 +78,55 @@ const Home = () => {
 
   const toggleNoteForm = (toggle) => {
     if (toggle === 'show') {
-      noteFormElement.setAttribute('show', 'true');
+      Utils.showElement(noteFormElement);
     }
     if (toggle === 'hide') {
-      noteFormElement.setAttribute('show', 'false');
+      Utils.hideElement(noteFormElement);
     }
   };
 
+  /* Handle submit notes form */
+  const onSubmitNoteHandler = async (event) => {
+    try {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const elements = Array.from(event.target);
+
+      const formData = elements.reduce((acc, el) => {
+        if (el.name) {
+          acc[el.name] = el.value;
+        }
+
+        return acc;
+      }, {});
+
+      const { title, body } = formData;
+
+      const noteData = {
+        title,
+        body,
+      };
+      const result = await ApiNotes.addNote(noteData);
+
+      if (result.status === 'fail') {
+        throw Error(result.message);
+      }
+
+      window.alert('add note success');
+      loadNote();
+      event.target.reset();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
+  /* handle validation */
+
   /* flying button and form show handler */
   flyingButtonElement.addEventListener('click', (evt) => {
-    const isEelementShow = noteFormElement.getAttribute('show');
-    if (isEelementShow === 'true') {
+    const isElementShow = noteFormElement.style.display === 'block';
+    if (isElementShow) {
       toggleNoteForm('hide');
     } else {
       toggleNoteForm('show');
@@ -119,9 +136,9 @@ const Home = () => {
   document.addEventListener('click', (event) => {
     const target = event.target;
     if (
-      !target.closest('note-form') &&
-      !target.closest('flying-button') &&
-      noteFormElement.getAttribute('show') === 'true'
+      !target.closest('.form-wrapper') &&
+      !target.closest('.flying-button') &&
+      noteFormElement.style.display === 'block'
     ) {
       toggleNoteForm('hide');
     }
@@ -134,7 +151,15 @@ const Home = () => {
 
   window.addEventListener('resize', resizeGridLayout);
 
-  noteFormElement.addEventListener('addNote', onSubmitNoteHandler);
+  /* form submit */
+  noteFormElement.querySelector('form').addEventListener('submit', onSubmitNoteHandler);
+
+  /* validate form */
+  inputs.forEach((input) => {
+    input.addEventListener('change', customValidationInputHandler);
+    input.addEventListener('invalid', customValidationInputHandler);
+    input.addEventListener('blur', validateFieldHandler);
+  });
 };
 
 export default Home;

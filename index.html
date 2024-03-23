@@ -26,8 +26,44 @@
           </div>
         </section>
         <section class="notes-form" id="notes-form">
-          <flying-button></flying-button>
-          <note-form show="true"></note-form>
+          <button class="flying-button">+</button>
+          <div class="form-wrapper">
+            <form id="note-form">
+              <h3>Add Note</h3>
+              <div className="input-title-wrapper">
+                <input
+                  type="text"
+                  placeholder="Note Title"
+                  required
+                  pattern="^[a-zA-Z0-9,. ]*$"
+                  maxlength="50"
+                  id="title"
+                  aria-describedby="titleValidation"
+                  autocomplete="off"
+                  name="title"
+                />
+                <p id="titleValidation" class="validation-message" aria-live="polite"></p>
+              </div>
+              <div className="input-body-wrapper">
+                <textarea
+                  id="desc-note"
+                  cols="30"
+                  rows="10"
+                  placeholder="Body Note"
+                  required
+                  maxlength="255"
+                  autocomplete="off"
+                  aria-describedby="bodyValidation"
+                  name="body"
+                ></textarea>
+                <p id="bodyValidation" class="validation-message" aria-live="polite"></p>
+              </div>
+
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+          <!-- <flying-button></flying-button> -->
+          <!-- <note-form show="true"></note-form> -->
         </section>
       </div>
     </main>
