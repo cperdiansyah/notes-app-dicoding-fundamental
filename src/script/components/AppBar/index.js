@@ -17,7 +17,7 @@ class AppBar extends HTMLElement {
         
         color: var(--color-black);
         
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+        // box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
       }
 
       div {

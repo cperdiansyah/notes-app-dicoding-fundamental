@@ -2,16 +2,16 @@ import Notes from '../../data/notes.js';
 import Utils from '../../utils.js';
 
 const Home = () => {
+  const notes = new Notes();
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('note-list');
 
-  const noteFormContainerElement = document.querySelector('#notes-form');
   const flyingButtonElement = document.querySelector('flying-button');
   const noteFormElement = document.querySelector('note-form');
 
   /* show note handler */
   const loadNote = () => {
-    const result = Notes.getAll();
+    const result = notes.getNotes();
     displayResult(result);
 
     showNoteList();
@@ -34,6 +34,26 @@ const Home = () => {
     Utils.showElement(noteListElement);
   };
 
+  /* Handle submit notes form */
+  const onSubmitNoteHandler = (event) => {
+    event.preventDefault();
+
+    const { title, body } = event.detail.data;
+
+    const date = new Date();
+
+    const noteData = {
+      id: `notes-${+date}`,
+      title,
+      body,
+      createdAt: date.toISOString(),
+      archived: false,
+    };
+    notes.addNote(noteData);
+    toggleNoteForm('hide');
+    loadNote();
+  };
+
   const resizeGridLayout = () => {
     const width = window.innerWidth;
     if (width > 768) {
@@ -48,13 +68,22 @@ const Home = () => {
     }
   };
 
+  const toggleNoteForm = (toggle) => {
+    if (toggle === 'show') {
+      noteFormElement.setAttribute('show', 'true');
+    }
+    if (toggle === 'hide') {
+      noteFormElement.setAttribute('show', 'false');
+    }
+  };
+
   /* flying button and form show handler */
   flyingButtonElement.addEventListener('click', (evt) => {
-    const isEelementShow = noteFormElement.hasAttribute('show');
-    if (isEelementShow) {
-      noteFormElement.removeAttribute('show');
+    const isEelementShow = noteFormElement.getAttribute('show');
+    if (isEelementShow === 'true') {
+      toggleNoteForm('hide');
     } else {
-      noteFormElement.setAttribute('show', 'true');
+      toggleNoteForm('show');
     }
   });
 
@@ -63,9 +92,9 @@ const Home = () => {
     if (
       !target.closest('note-form') &&
       !target.closest('flying-button') &&
-      noteFormElement.hasAttribute('show')
+      noteFormElement.getAttribute('show') === 'true'
     ) {
-      noteFormElement.removeAttribute('show');
+      toggleNoteForm('hide');
     }
   });
 
@@ -75,6 +104,8 @@ const Home = () => {
   });
 
   window.addEventListener('resize', resizeGridLayout);
+
+  noteFormElement.addEventListener('addNote', onSubmitNoteHandler);
 };
 
 export default Home;
