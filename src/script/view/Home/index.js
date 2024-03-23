@@ -43,15 +43,15 @@ const Home = () => {
     const date = new Date();
 
     const noteData = {
+      id: `notes-${+date}`,
       title,
       body,
-      id: `notes-${+date}`,
-      created_at: date.toISOString(),
+      createdAt: date.toISOString(),
+      archived: false,
     };
     notes.addNote(noteData);
     toggleNoteForm('hide');
-
-    const latestData = notes.getNotes()
+    loadNote();
   };
 
   const resizeGridLayout = () => {
@@ -73,14 +73,14 @@ const Home = () => {
       noteFormElement.setAttribute('show', 'true');
     }
     if (toggle === 'hide') {
-      noteFormElement.removeAttribute('show');
+      noteFormElement.setAttribute('show', 'false');
     }
   };
 
   /* flying button and form show handler */
   flyingButtonElement.addEventListener('click', (evt) => {
-    const isEelementShow = noteFormElement.hasAttribute('show');
-    if (isEelementShow) {
+    const isEelementShow = noteFormElement.getAttribute('show');
+    if (isEelementShow === 'true') {
       toggleNoteForm('hide');
     } else {
       toggleNoteForm('show');
@@ -92,7 +92,7 @@ const Home = () => {
     if (
       !target.closest('note-form') &&
       !target.closest('flying-button') &&
-      noteFormElement.hasAttribute('show')
+      noteFormElement.getAttribute('show') === 'true'
     ) {
       toggleNoteForm('hide');
     }

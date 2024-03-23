@@ -83,7 +83,7 @@ class AddNoteForm extends HTMLElement {
         button{
           color: #fff;
           background-color: var(--color-black);
-          
+          cursor: pointer;
           transition: all 150ms ease-in;
         }
 
@@ -112,66 +112,43 @@ class AddNoteForm extends HTMLElement {
         }
       `;
   }
+
   connectedCallback() {
-    this._shadowRoot
-      .querySelector('form')
-      .addEventListener('submit', (event) => this._onFormSubmit(event, this));
+    const form = this._shadowRoot.querySelector('form');
+    const inputs = this._shadowRoot.querySelectorAll('form input, form textarea');
+
+    form.addEventListener('submit', (event) => this._onFormSubmit(event, this));
     this.addEventListener(this._submitNote, this._onNoteFormSubmit);
 
     /* Validation */
-    this._shadowRoot
-      .querySelector('form input')
-      .addEventListener('change', this._customValidationInputHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .addEventListener('change', this._customValidationInputHandler);
-
-    this._shadowRoot
-      .querySelector('form input')
-      .addEventListener('invalid', this._customValidationInputHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .addEventListener('invalid', this._customValidationInputHandler);
-
-    this._shadowRoot
-      .querySelector('form input')
-      .addEventListener('blur', this._validateFieldHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .addEventListener('blur', this._validateFieldHandler);
+    inputs.forEach((input) => {
+      input.addEventListener('change', this._customValidationInputHandler);
+      input.addEventListener('invalid', this._customValidationInputHandler);
+      input.addEventListener('blur', this._validateFieldHandler);
+    });
   }
+
   disconnectedCallback() {
-    this._shadowRoot
-      .querySelector('form')
-      .removeEventListener('submit', (event) => this._onFormSubmit(event, this));
+    const form = this._shadowRoot.querySelector('form');
+    const inputs = this._shadowRoot.querySelectorAll('form input, form textarea');
+
+    form.removeEventListener('submit', (event) => this._onFormSubmit(event, this));
     this.removeEventListener(this._submitNote, this._onNoteFormSubmit);
 
     /* Validation */
-    this._shadowRoot
-      .querySelector('form input')
-      .removeEventListener('change', this._customValidationInputHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .removeEventListener('change', this._customValidationInputHandler);
-
-    this._shadowRoot
-      .querySelector('form input')
-      .removeEventListener('invalid', this._customValidationInputHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .removeEventListener('invalid', this._customValidationInputHandler);
-
-    this._shadowRoot
-      .querySelector('form input')
-      .removeEventListener('blur', this._validateFieldHandler);
-    this._shadowRoot
-      .querySelector('form textarea')
-      .removeEventListener('blur', this._validateFieldHandler);
+    inputs.forEach((input) => {
+      input.removeEventListener('change', this._customValidationInputHandler);
+      input.removeEventListener('invalid', this._customValidationInputHandler);
+      input.removeEventListener('blur', this._validateFieldHandler);
+    });
   }
 
+  adoptedCallback() {
+    console.log('Custom element moved to new page.');
+  }
   _onFormSubmit(event, noteFormInstance) {
-    noteFormInstance.dispatchEvent(new CustomEvent('submit'));
     event.preventDefault();
+    noteFormInstance.dispatchEvent(new CustomEvent('submit'));
   }
 
   _onNoteFormSubmit() {
@@ -274,7 +251,7 @@ class AddNoteForm extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case 'show':
-        this.show = newValue;
+        this.show = newValue === 'true';
         break;
     }
 
