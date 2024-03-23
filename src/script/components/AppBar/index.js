@@ -20,8 +20,12 @@ class AppBar extends HTMLElement {
         // box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
       }
 
-      div {
+      nav {
         padding: 24px 20px;
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+    }
       }
 
       .brand-name {
@@ -29,6 +33,29 @@ class AppBar extends HTMLElement {
       
         font-size: 1.7em;
       }
+      .navigation {
+        margin-right : 50px;
+      }
+      .navigation ul{
+        display : inline-block;
+      }
+      .navigation ul li{
+        list-style-type: none;
+      
+      }
+
+      .navigation ul li a{
+        text-decoration:none;
+        color: var(--color-black)
+        padding: 3px 5px;
+        font-size : 1.1rem
+      }
+
+      .navigation ul li a:hover{
+        font-weight: 700;
+       }
+
+      
     `;
   }
 
@@ -46,9 +73,17 @@ class AppBar extends HTMLElement {
 
     this._shadowRoot.appendChild(this._style);
     this._shadowRoot.innerHTML += `      
-      <div>
+      <nav>
         <h1 class="brand-name">Notes App</h1>
-      </div>
+        <div class="navigation">
+          <ul>
+            <li><a href="/index.html">Home</a></li>
+          </ul>
+          <ul>
+            <li><a href="/archive.html">Archive</a></li>
+          </ul>
+        </div>
+      </nav>
     `;
   }
 }
