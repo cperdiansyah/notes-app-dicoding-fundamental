@@ -16,7 +16,7 @@ const Home = () => {
     loadNote();
 
     Utils.resizeGridLayout(noteListElement);
-    showNoteList();
+    // showNoteList();
   };
 
   const loadNote = async () => {
