@@ -16,7 +16,7 @@ class FooterBar extends HTMLElement {
       }
       
       div {
-        background-color: #fff;
+        // background-color: #fff;
         margin: 24px 20px;
         // position: fixed;
         // bottom: 0;

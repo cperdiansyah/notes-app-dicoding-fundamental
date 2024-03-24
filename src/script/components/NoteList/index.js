@@ -4,9 +4,11 @@ class NoteList extends HTMLElement {
   _style = null;
   _column = 3;
   _gutter = 16;
+  _loading = true;
+  _empty = false;
 
   static get observedAttributes() {
-    return ['column', 'gutter'];
+    return ['column', 'gutter', 'loading', 'empty'];
   }
 
   constructor() {
@@ -29,6 +31,19 @@ class NoteList extends HTMLElement {
           grid-template-columns: ${'1fr '.repeat(this.column)};
         
           gap: ${this.gutter}px;
+        }
+
+        .note-list-info {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          height: 50vh;
+        }
+        .info {
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 500;
         }
       `;
   }
@@ -54,6 +69,22 @@ class NoteList extends HTMLElement {
   get gutter() {
     return this._gutter;
   }
+  set loading(value) {
+    const newValue = value === 'true';
+    this._loading = newValue;
+  }
+
+  get loading() {
+    return this.newValue === 'true';
+  }
+  set empty(value) {
+    const newValue = value === 'true';
+    this._empty = newValue;
+  }
+
+  get empty() {
+    return this.newValue === 'true';
+  }
 
   _emptyContent() {
     this._shadowRoot.innerHTML = '';
@@ -63,11 +94,25 @@ class NoteList extends HTMLElement {
     this._updateStyle();
 
     this._shadowRoot.appendChild(this._style);
-    this._shadowRoot.innerHTML += `
-        <div class="note-list">
-          <slot></slot>
-        </div>
-      `;
+    if (this._loading) {
+      this._shadowRoot.innerHTML += `
+          <div class="note-list-info">
+            <div class="info">Loading...</div>
+          </div>
+        `;
+    } else if (this._empty) {
+      this._shadowRoot.innerHTML += `
+          <div class="note-list-info">
+            <div class="info">Empty Note</div>
+          </div>
+        `;
+    } else {
+      this._shadowRoot.innerHTML += `
+          <div class="note-list">
+            <slot></slot>
+          </div>
+        `;
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -77,6 +122,12 @@ class NoteList extends HTMLElement {
         break;
       case 'gutter':
         this.gutter = newValue;
+        break;
+      case 'loading':
+        this.loading = newValue;
+        break;
+      case 'empty':
+        this.empty = newValue;
         break;
     }
 
