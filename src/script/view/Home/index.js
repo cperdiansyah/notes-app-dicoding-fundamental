@@ -14,6 +14,7 @@ const Home = () => {
   /* show note handler */
   const init = async () => {
     loadNote();
+
     Utils.resizeGridLayout(noteListElement);
   };
 
@@ -37,7 +38,7 @@ const Home = () => {
         noteListElement.setAttribute('loading', false);
         Utils.displayResult(notes.data, noteListElement);
         Utils.showNoteList(noteListContainerElement, noteListElement);
-      }, [500]);
+      }, 500);
     } catch (error) {
       noteListElement.setAttribute('loading', false);
 
@@ -90,6 +91,44 @@ const Home = () => {
     }
   };
 
+  /* Delete note */
+  const onDeleteNoteItem = async (id) => {
+    try {
+      const result = await ApiNotes.deleteNote(id);
+
+      if (result.status === 'fail') {
+        throw Error(result.message);
+      }
+
+      window.alert('delete note success');
+      loadNote();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+  const onArchiveNoteItem = async (id) => {
+    const isArchhivedPage = window.location.href.includes('archive');
+
+    try {
+      let result;
+
+      if (isArchhivedPage) {
+        result = await ApiNotes.unarchiveNote(id);
+      } else {
+        result = await ApiNotes.archiveNote(id);
+      }
+
+      if (result.status === 'fail') {
+        throw Error(result.message);
+      }
+
+      window.alert(`${isArchhivedPage ? 'unarchive' : 'archive'} note success`);
+      loadNote();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   /* flying button and form show handler */
   flyingButtonElement.addEventListener('click', (evt) => {
     const isElementShow = noteFormElement.style.display === 'block';
@@ -126,6 +165,27 @@ const Home = () => {
     input.addEventListener('change', customValidationInputHandler);
     input.addEventListener('invalid', customValidationInputHandler);
     input.addEventListener('blur', validateFieldHandler);
+  });
+
+  /* delete and archive button handler */
+  document.querySelector('main').addEventListener('click', (e) => {
+    const noteItemElement = e.target._shadowRoot;
+    if (noteItemElement) {
+      const cardNoteItem = noteItemElement.querySelector('.note-item');
+
+      const deleteButton = cardNoteItem.querySelector('.delete-button');
+      const archiveButton = cardNoteItem.querySelector('.archive-button');
+      // console.log(deleteButton);
+      deleteButton.addEventListener('click', () => {
+        onDeleteNoteItem(cardNoteItem.id);
+        return;
+      });
+      console.log(archiveButton);
+      archiveButton.addEventListener('click', () => {
+        onArchiveNoteItem(cardNoteItem.id);
+        return;
+      });
+    }
   });
 };
 

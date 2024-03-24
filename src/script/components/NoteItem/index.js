@@ -32,6 +32,7 @@ class NoteItem extends HTMLElement {
 
   _updateStyle() {
     this._style.textContent = `
+      
         :host {
           display: block;
           border-radius: 8px;
@@ -70,6 +71,15 @@ class NoteItem extends HTMLElement {
           -webkit-line-clamp: 5; /* number of lines to show */
         } 
 
+        .button-control{
+          display : flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .button-control button{
+          padding : 5px 10px;
+        }
+
       `;
   }
 
@@ -79,9 +89,9 @@ class NoteItem extends HTMLElement {
 
     this._shadowRoot.appendChild(this._style);
     const noteDate = new Date(this._note.createdAt).toLocaleString('en-UK');
-
+    const isArchhivedPage = window.location.href.includes('archive');
     this._shadowRoot.innerHTML += `      
-        <div class="card note-item">
+        <div class="card note-item" id="${this._note.id}">
           <div class="note-item__note-header">
             <div class="note-item__note-header__title">
               <h2>${this._note.title}</h2>
@@ -95,6 +105,18 @@ class NoteItem extends HTMLElement {
             <div class="note-item__note-body__description">
               <p>${this._note.body}</p>
             </div>
+          </div>
+          <div class="button-control">
+            <button class="archive-button">
+            ${isArchhivedPage
+                ? `Unarchive`
+                : `Archive`
+            }
+            </button>
+            <button class="delete-button">
+              Delete
+            </button>
+            
           </div>
         </div>
       `;

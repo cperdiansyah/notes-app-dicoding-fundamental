@@ -43,7 +43,7 @@ class ApiNotes {
     const data = await ApiNotes.api(`${API_URL}/notes/${id}/archive`, 'POST');
     return data;
   }
-  static async archiveNote(id) {
+  static async unarchiveNote(id) {
     const data = await ApiNotes.api(`${API_URL}/notes/${id}/unarchive`, 'POST');
     return data;
   }
