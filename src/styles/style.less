@@ -11,7 +11,7 @@
 
 body {
   font-family: sans-serif;
-  background-color:#f2f2f2;
+  background-color: #f2f2f2;
 }
 /* header */
 header {
@@ -33,42 +33,6 @@ header {
 
 .container {
   padding: 0 20px;
-}
-
-.sketch-button {
-  display: inline-block;
-  padding: 10px 20px;
-  border: none;
-  background-color: #fff;
-  color: #333;
-  font-family: sans-serif;
-  position: relative;
-}
-
-.sketch-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  /* Skew the border for a hand-drawn effect */
-  transform: skewX(-2deg) skewY(-2deg);
-}
-
-.sketch-button::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  /* Add some inner shadows for depth */
-  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2), inset -1px -1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .card {
@@ -97,5 +61,101 @@ header {
   &::before {
     border: 1px solid #ddd;
     box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2), inset -1px -1px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+button {
+  &.flying-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+
+    color: #fff;
+    background-color: var(--color-black);
+    font-size: 1.5rem;
+
+    transition: all 150ms ease-in;
+  }
+  &:hover {
+    background-color: rgb(100, 100, 100);
+  }
+  &:active {
+    background-color: rgb(75, 75, 75);
+  }
+}
+
+/* form */
+
+.form-wrapper {
+  display: block;
+  padding: 20px;
+  width: 50%;
+
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 5px 10px 20px #e1e1e3, -15px -15px 27px #ffffff;
+  -webkit-box-shadow: 5px 10px 20px #e1e1e3, -15px -15px 27px #ffffff;
+  border: 1px solid #4b4b4b;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+
+  h3 {
+    font-size: x-large;
+    margin: 0;
+  }
+
+  h3,
+  input,
+  textarea,
+  button {
+    font-family: monospace;
+  }
+
+  input,
+  textarea,
+  button {
+    font-size: 16px;
+    padding: 10px;
+    font-family: monospace;
+    width: -webkit-fill-available;
+  }
+
+  button {
+    color: #fff;
+    background-color: var(--color-black);
+    cursor: pointer;
+    transition: all 150ms ease-in;
+  }
+
+  .validation-message {
+    margin-block-start: 0.5rem;
+    color: red;
+  }
+  @media (max-width: 450px) {
+    width: 75%;
+  }
+
+  @media (min-width: 450px) {
+    width: 60%;
+  }
+
+  @media (min-width: 768px) {
+    width: 50%;
   }
 }
