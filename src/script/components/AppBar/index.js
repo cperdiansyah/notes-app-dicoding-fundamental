@@ -48,7 +48,8 @@ class AppBar extends HTMLElement {
         text-decoration:none;
         color: var(--color-black)
         padding: 3px 5px;
-        font-size : 1.1rem
+        font-size : 1.1rem;
+        transition: all 400ms ease-in;
       }
 
       .navigation ul li a:hover{

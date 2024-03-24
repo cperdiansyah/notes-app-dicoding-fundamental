@@ -14,7 +14,7 @@ const Home = () => {
   /* show note handler */
   const init = async () => {
     loadNote();
-    resizeGridLayout();
+    Utils.resizeGridLayout(noteListElement);
   };
 
   const loadNote = async () => {
@@ -35,44 +35,13 @@ const Home = () => {
 
       setTimeout(() => {
         noteListElement.setAttribute('loading', false);
-        displayResult(notes.data);
-        showNoteList();
+        Utils.displayResult(notes.data, noteListElement);
+        Utils.showNoteList(noteListContainerElement, noteListElement);
       }, [500]);
     } catch (error) {
       noteListElement.setAttribute('loading', false);
 
       throw error;
-    }
-  };
-
-  const displayResult = (notes) => {
-    const noteItemElements = notes.map((note) => {
-      const noteItem = document.createElement('note-item');
-      noteItem.note = note;
-      return noteItem;
-    });
-    Utils.emptyElement(noteListElement);
-    noteListElement.append(...noteItemElements);
-  };
-
-  const showNoteList = () => {
-    Array.from(noteListContainerElement.children).forEach((element) => {
-      Utils.hideElement(element);
-    });
-    Utils.showElement(noteListElement);
-  };
-
-  const resizeGridLayout = () => {
-    const width = window.innerWidth;
-    if (width > 768) {
-      noteListElement.setAttribute('column', '3');
-      noteListElement.setAttribute('gutter', '16');
-    } else if (width > 450) {
-      noteListElement.setAttribute('column', '2');
-      noteListElement.setAttribute('gutter', '13');
-    } else {
-      noteListElement.setAttribute('column', '1');
-      noteListElement.setAttribute('gutter', '10');
     }
   };
 
@@ -121,8 +90,6 @@ const Home = () => {
     }
   };
 
-  /* handle validation */
-
   /* flying button and form show handler */
   flyingButtonElement.addEventListener('click', (evt) => {
     const isElementShow = noteFormElement.style.display === 'block';
@@ -149,7 +116,7 @@ const Home = () => {
     init();
   });
 
-  window.addEventListener('resize', resizeGridLayout);
+  window.addEventListener('resize', () => Utils.resizeGridLayout(noteListElement));
 
   /* form submit */
   noteFormElement.querySelector('form').addEventListener('submit', onSubmitNoteHandler);
