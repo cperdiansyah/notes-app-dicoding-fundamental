@@ -37,12 +37,56 @@ const Archive = () => {
     }
   };
 
+  const onArchiveNoteItem = async (id) => {
+    const isArchhivedPage = window.location.href.includes('archive');
+
+    try {
+      let result;
+
+      if (isArchhivedPage) {
+        result = await ApiNotes.unarchiveNote(id);
+      } else {
+        result = await ApiNotes.archiveNote(id);
+      }
+
+      if (result.status === 'fail') {
+        throw Error(result.message);
+      }
+
+      window.alert(`${isArchhivedPage ? 'unarchive' : 'archive'} note success`);
+      loadNote();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   /* Load note handler */
   window.addEventListener('DOMContentLoaded', () => {
     init();
   });
 
   window.addEventListener('resize', () => Utils.resizeGridLayout(noteListElement));
+
+  /* delete and archive button handler */
+  document.querySelector('main').addEventListener('click', (e) => {
+    const noteItemElement = e.target._shadowRoot;
+    if (noteItemElement) {
+      const cardNoteItem = noteItemElement.querySelector('.note-item');
+
+      const deleteButton = cardNoteItem.querySelector('.delete-button');
+      const archiveButton = cardNoteItem.querySelector('.archive-button');
+      // console.log(deleteButton);
+      deleteButton.addEventListener('click', () => {
+        onDeleteNoteItem(cardNoteItem.id);
+        return;
+      });
+      console.log(archiveButton);
+      archiveButton.addEventListener('click', () => {
+        onArchiveNoteItem(cardNoteItem.id);
+        return;
+      });
+    }
+  });
 };
 
 export default Archive;
